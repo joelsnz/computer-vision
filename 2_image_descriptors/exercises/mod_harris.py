@@ -84,7 +84,7 @@ def get_descriptors(image, filtered_coords, wid=5) -> list:
     return desc
 
 
-def match(desc1, desc2, distance, threshold=0.5) -> list:
+def match(desc1, desc2, distance, threshold) -> list:
     """ For each corner point descriptor in the first image,
         select its match to second image using 
         normalized cross correlation. """
@@ -153,7 +153,7 @@ def plot_matches(im1, im2, locs1, locs2, matchscores, show_below=True) -> None:
     cols1 = im1.shape[1]
     for i, m in enumerate(matchscores):
         if m > 0:
-            plt.plot([locs1[i][1], locs2[m][1] + cols1], [locs1[i][0], locs2[m][0]], 'c')
+            plt.plot([locs1[i][1], locs2[m][1]+cols1], [locs1[i][0], locs2[m][0]], 'c')
     
     plt.axis('off')
 
