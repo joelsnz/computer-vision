@@ -84,7 +84,7 @@ def get_descriptors(image, filtered_coords, wid=5) -> list:
     return desc
 
 
-def match(desc1, desc2, distance, threshold=0.5) -> list:
+def match(desc1, desc2, threshold=0.5) -> list:
     """ For each corner point descriptor in the first image,
         select its match to second image using 
         normalized cross correlation. """
@@ -97,20 +97,20 @@ def match(desc1, desc2, distance, threshold=0.5) -> list:
         for j in range(len(desc2)):
             d1 = (desc1[i] - np.mean(desc1[i])) / np.std(desc1[i])
             d2 = (desc2[j] - np.mean(desc2[j])) / np.std(desc2[j])
-            hypotenuse = np.sqrt((desc1[i][0] ** 2) + (desc2[j][1] ** 2))
             ncc_value = np.sum(d1 * d2) / (n - 1)
-            if (ncc_value > threshold) and (hypotenuse < distance):
+            if ncc_value > threshold:
                 d[i, j] = ncc_value
+
     ndx = np.argsort(-d) # distances negated since high values mean better match
     matchscores = ndx[:, 0]
 
     return matchscores
 
 
-def match_twosided(desc1, desc2, distance=50.0, threshold=0.5):
+def match_twosided(desc1, desc2, threshold=0.5):
     """ Two-sided symmetric version of match(). """
-    matches_12 = match(desc1, desc2, distance, threshold)
-    matches_21 = match(desc2, desc1, distance, threshold)
+    matches_12 = match(desc1, desc2, threshold)
+    matches_21 = match(desc2, desc1, threshold)
 
     ndx_12 = np.where(matches_12 >= 0)[0]
 
