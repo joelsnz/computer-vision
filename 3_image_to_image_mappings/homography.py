@@ -1,4 +1,5 @@
 import numpy as np
+from numpy import linalg
 
 def normalize(points):
     """ Normalize a collection of points in
@@ -29,7 +30,7 @@ def H_from_points(fp, tp):
     # conditioning -> normalize so mean = 0 and std = 1
     # -- from points --
     m = np.mean(fp[:2], axis=1)
-    maxstd = np.max(np.std(fp[:2], axis=1)) + 1e - 9
+    maxstd = np.max(np.std(fp[:2], axis=1)) + 1e-9
     C1 = np.diag([1/maxstd, 1/maxstd, 1])
     C1[0][2] = -m[0] / maxstd
     C1[1][2] = -m[1] / maxstd
@@ -37,7 +38,7 @@ def H_from_points(fp, tp):
 
     # -- to points --
     m = np.mean(tp[:2], axis=1)
-    maxstd = np.max(np.std(tp[:2], axis=1)) + 1e - 9
+    maxstd = np.max(np.std(tp[:2], axis=1)) + 1e-9
     C2 = np.diag([1/maxstd, 1/maxstd, 1])
     C2[0][2] = -m[0] / maxstd
     C2[1][2] = -m[1] / maxstd
@@ -72,7 +73,7 @@ def Haffine_from_points(fp, tp):
     # condition points
     # -- from points --
     m = np.mean(fp[:2], axis=1)
-    maxstd = np.max(np.std(fp[:2], axis=1)) + 1e - 9
+    maxstd = np.max(np.std(fp[:2], axis=1)) + 1e-9
     C1 = np.diag([1/maxstd, 1/maxstd, 1])
     C1[0][2] = -m[0] / maxstd
     C1[1][2] = -m[1] / maxstd
@@ -80,7 +81,7 @@ def Haffine_from_points(fp, tp):
 
     # -- to points --
     m = np.mean(tp[:2], axis=1)
-    maxstd = np.max(np.std(tp[:2], axis=1)) + 1e - 9
+    maxstd = np.max(np.std(tp[:2], axis=1)) + 1e-9
     C2 = np.diag([1/maxstd, 1/maxstd, 1])
     C2[0][2] = -m[0] / maxstd
     C2[1][2] = -m[1] / maxstd
