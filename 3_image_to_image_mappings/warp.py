@@ -3,6 +3,7 @@ import numpy as np
 from numpy import linalg
 import homography
 from scipy import ndimage
+from scipy.spatial import Delaunay
 
 def alpha_for_triangle(points, m, n):
     """ Creates alpha map of size (m, n)
@@ -72,3 +73,62 @@ def advanced_image_in_image(im1, im2, tp):
     alpha = alpha_for_triangle(tp2, im2.shape[0], im2.shape[1])
 
     return (1 - alpha) * im3 + (alpha * im1_t)
+
+
+def triangulate_points(x, y):
+    """ Dealunay triangulation of 2D points. """
+    if len(x) != len(y):
+        RaiseError(f'x points number {len(x)} does not equal y points number {len(y)}')
+
+    points = [[x[point], y[point]] for point in range(len(x))]
+
+    return Delaunay(points)
+
+
+def pw_affine(fromim, toim, fp, tp, tri):
+    """ Warp triangular patches from an image.
+        :param fromim: image to warp
+        :param toim: destination image
+        :param fp: from points in hom. coordiantes
+        :param tp: to points in hom. coordinates
+        :param tri: triangulation. """
+
+    im = toim.copy()
+
+    # check if image is grayscale or color
+    is_color = len(fromim.shape) == 3
+
+    # create image to warp to (needed if iterate colors)
+    im_t = np.zeros(im.shape, 'uint8')
+
+    for t in tri.simplices:
+        # compute affine transformation
+        H = homography.Haffine_from_points(tp[:, t], fp[:, t])
+
+    if is_color:
+        for col in range(fromim.shape[2]):
+            im_t[:, :, col] = ndimage.affine_transform(fromim[:, :, col], 
+                                                       H[:2, :2],
+                                                       (H[0, 2], H[1, 2]),
+                                                       im.shape[:2])
+    else:
+        im_t = ndimage.affine_transform(fromim, H[:2, :2],
+                                        (H[0, 2], H[1, 2]),
+                                        im.shape[:2])
+
+    # alpha for triangle
+    alpha = alpha_for_triangle(tp[:, t], im.shape[0], im.shape[1])
+
+    # add triangle to image
+    im[alpha > 0] = im_t[alpha > 0]
+
+    return im
+
+
+def plot_mesh(x, y, tri) -> None:
+    """ Plot triangles. """
+
+    plt.triplot(x, y, tri.simplices)
+    plt.plot(x, y, '*')
+
+    return
