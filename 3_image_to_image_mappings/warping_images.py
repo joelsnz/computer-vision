@@ -3,7 +3,6 @@ from scipy.spatial import Delaunay
 import numpy as np
 from PIL import Image
 import matplotlib.pyplot as plt
-from matplotlib import tri
 import warp
 
 def main() -> int:
