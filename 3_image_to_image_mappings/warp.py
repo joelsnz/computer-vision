@@ -5,6 +5,7 @@ import homography
 from scipy import ndimage
 from scipy.spatial import Delaunay
 
+
 def alpha_for_triangle(points, m, n):
     """ Creates alpha map of size (m, n)
         for a triangle with corners defined by points
