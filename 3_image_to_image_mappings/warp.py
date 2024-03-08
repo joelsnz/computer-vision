@@ -1,10 +1,11 @@
-from PIL import Image
+import matplotlib.pyplot as plt
 import numpy as np
 from numpy import linalg
-import homography
+from PIL import Image
 from scipy import ndimage
 from scipy.spatial import Delaunay
-import matplotlib.pyplot as plt
+
+import homography
 
 
 def alpha_for_triangle(points, m, n):
@@ -103,22 +104,21 @@ def pw_affine(fromim, toim, fp, tp, tri):
     for t in tri.simplices:
         # compute affine transformation
         H = homography.Haffine_from_points(tp[:, t], fp[:, t])
-
-    if is_color:
-        for col in range(fromim.shape[2]):
-            im_t[:, :, col] = ndimage.affine_transform(
-                fromim[:, :, col], H[:2, :2], (H[0, 2], H[1, 2]), im.shape[:2]
+        if is_color:
+            for col in range(fromim.shape[2]):
+                im_t[:, :, col] = ndimage.affine_transform(
+                    fromim[:, :, col], H[:2, :2], (H[0, 2], H[1, 2]), im.shape[:2]
+                )
+        else:
+            im_t = ndimage.affine_transform(
+                fromim, H[:2, :2], (H[0, 2], H[1, 2]), im.shape[:2]
             )
-    else:
-        im_t = ndimage.affine_transform(
-            fromim, H[:2, :2], (H[0, 2], H[1, 2]), im.shape[:2]
-        )
 
-    # alpha for triangle
-    alpha = alpha_for_triangle(tp[:, t], im.shape[0], im.shape[1])
+        # alpha for triangle
+        alpha = alpha_for_triangle(tp[:, t], im.shape[0], im.shape[1])
 
-    # add triangle to image
-    im[alpha > 0] = im_t[alpha > 0]
+        # add triangle to image
+        im[alpha > 0] = im_t[alpha > 0]
 
     return im
 
