@@ -1,8 +1,9 @@
-from scipy import ndimage
-from scipy.spatial import Delaunay
+import matplotlib.pyplot as plt
 import numpy as np
 from PIL import Image
-import matplotlib.pyplot as plt
+from scipy import ndimage
+from scipy.spatial import Delaunay
+
 import warp
 
 
@@ -103,7 +104,6 @@ def turning_torso() -> None:
     plt.imshow(im)
     warp.plot_mesh(tp[1], tp[0], tri)
     plt.axis("off")
-    plt.savefig("turning_torso.svg")
     plt.show()
 
 
