@@ -52,12 +52,12 @@ def get_fast_descriptors(initial_x, initial_y):
     return circle_points
 
 
-def get_fast_candidates(im, threshold):
+def get_fast_points(im, threshold):
     """ Return FAST Corner Detector points. """
     candidates = []
     for x_shift in range(im.shape[0]):
         for y_shift in range(im.shape[1]):
-            candidates.append(get_fast_descriptors(x_shift, y_shift))
+            # check if the point is actually a corner
 
     return candidates
 
