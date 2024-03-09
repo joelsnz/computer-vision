@@ -6,12 +6,12 @@ from mod_harris import *
 
 
 def main() -> int:
-    """ Modify the function for matching Harris corner points to also take
-        a maximum pixel distance between points for them to be considered
-        as correspondences in order to make matching more robust. """
+    """Modify the function for matching Harris corner points to also take
+    a maximum pixel distance between points for them to be considered
+    as correspondences in order to make matching more robust."""
 
-    im1 = np.array(Image.open('../../data/crans_1_small.jpg').convert('L'))
-    im2 = np.array(Image.open('../../data/crans_2_small.jpg').convert('L'))
+    im1 = np.array(Image.open("../../data/crans_1_small.jpg").convert("L"))
+    im2 = np.array(Image.open("../../data/crans_2_small.jpg").convert("L"))
 
     wid = 5
     harrisim = compute_harris_response(im1, 5)
