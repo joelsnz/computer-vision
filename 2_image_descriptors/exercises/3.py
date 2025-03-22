@@ -1,4 +1,6 @@
 from fast import *
+import numpy as np
+from PIL import Image
 
 
 def main() -> int:
@@ -10,8 +12,8 @@ def main() -> int:
     and compare the corners with the ones from our Harris
     implementation."""
 
-    points = []
-    points = get_fast_descriptors(3, 2)
+    im = np.array(Image.open("../../data/alcatraz1.jpg").convert("L"))
+    points = get_fast_points(im, 0)
     print(points)
 
     return 0

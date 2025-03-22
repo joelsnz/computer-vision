@@ -2,7 +2,7 @@ import numpy as np
 
 
 def get_fast_descriptors(initial_x, initial_y):
-    """ 
+    """
     Computes the Bresenham's line algorithm to find the circumference
     pixels of a point with a radius of 3px.
     :param circle_x: x_shift position of the central point.
@@ -53,11 +53,13 @@ def get_fast_descriptors(initial_x, initial_y):
 
 
 def get_fast_points(im, threshold):
-    """ Return FAST Corner Detector points. """
+    """Return FAST Corner Detector points."""
     candidates = []
     for x_shift in range(im.shape[0]):
         for y_shift in range(im.shape[1]):
             # check if the point is actually a corner
+            for point in get_fast_descriptors(x_shift, y_shift):
+                print(point)
 
     return candidates
 
